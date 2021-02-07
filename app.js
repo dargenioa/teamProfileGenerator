@@ -33,3 +33,74 @@ const render = require("./lib/htmlRenderer");
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
+
+const employees = [];
+
+const addEmployee = () => {
+    inquirer
+      .prompt([
+        {
+          name: "name",
+          type: "input",
+          message: "Please enter your first name."
+        },
+        {
+          name: "id",
+          type: "input",
+          message: "Please enter your employee ID."
+        },
+        {
+          name: "email",
+          type: "input",
+          message: "Please enter your employee email address."
+        },
+        {
+          name: "role",
+          type: "list",
+          message: "Please select your role at the company",
+          choices: [
+            "Engineer",
+            "Intern",
+            "Manager",
+          ]
+        },
+      ])
+      .then(function (answer) {
+        let choice = answer.role
+        switch (choice) {
+          case "Engineer":
+            inquirer
+            .prompt([
+              {
+                name: "github",
+                type: "input",
+                message: "Please enter your github username"
+              }
+            ]);
+            break;
+  
+          case "Intern":
+            inquirer
+            .prompt([
+              {
+                name: "school",
+                type: "input",
+                message: "Please enter the name of your highest school completed"
+              }
+            ]);
+            break;
+  
+          case "Manager":
+            inquirer
+            .prompt([
+              {
+                name: "officeNumber",
+                type: "input",
+                message: "Please enter your office number"
+              }
+            ]);
+        break;
+      }
+    });
+}
+
