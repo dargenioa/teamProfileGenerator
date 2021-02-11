@@ -36,51 +36,102 @@ const render = require("./lib/htmlRenderer");
 const employees = [];
 
 const addEmployee = () => {
-  inquirer.prompt([
-    {
-      name: "name",
-      type: "input",
-      message: "Please enter your first name.",
-    },
-    {
-      name: "id",
-      type: "input",
-      message: "Please enter your employee ID.",
-    },
-    {
-      name: "email",
-      type: "input",
-      message: "Please enter your employee email address.",
-    },
-    {
-      name: "role",
-      type: "list",
-      message: "Please select your role at the company",
-      choices: ["Engineer", "Intern", "Manager"],
-    },
-    {
-      name: "github",
-      type: "input",
-      message: "Please enter your github username",
-      when: (answer) => answer.role === "Engineer",
-    },
-    {
-      name: "school",
-      type: "input",
-      message: "Please enter the name of your highest school completed",
-      when: (answer) => answer.role === "Intern",
-    },
-    {
-      name: "officeNumber",
-      type: "input",
-      message: "Please enter your office number",
-      when: (answer) => answer.role === "Manager",
+  inquirer
+    .prompt([
+      {
+        name: "name",
+        type: "input",
+        message: "Please enter your first name.",
+      },
+      {
+        name: "id",
+        type: "input",
+        message: "Please enter your employee ID.",
+      },
+      {
+        name: "email",
+        type: "input",
+        message: "Please enter your employee email address.",
+      },
+      {
+        name: "role",
+        type: "list",
+        message: "Please select your role at the company",
+        choices: ["Engineer", "Intern", "Manager"],
+      },
+      {
+        name: "github",
+        type: "input",
+        message: "Please enter your github username",
+        when: (answer) => answer.role === "Engineer",
+      },
+      {
+        name: "school",
+        type: "input",
+        message: "Please enter the name of your highest school completed",
+        when: (answer) => answer.role === "Intern",
+      },
+      {
+        name: "officeNumber",
+        type: "input",
+        message: "Please enter your office number",
+        when: (answer) => answer.role === "Manager",
+      },
+      {
+        name: "newEmployee",
+        type: "confirm",
+        message: "Would you like to add another employee?",
+        validate: (answer) => {
+          if (answer.newEmployee === true) {
+            addEmployee();
+          } else {
+            console.log("exit");
+          }
+        },
+      },
+    ])
+    .then((answer) => {
+      let choice = answer.role;
+      switch (choice) {
+        case "Engineer":
+          let engineer = new Engineer(
+            answer.name,
+            answer.id,
+            answer.email,
+            answer.github
+          );
+          employees.push(engineer);
+          console.log(engineer + employees);
+          console.log(answer);
+          break;
 
-    },
-  ])
-  .then(results => {
-    console.log(results);
-  })
+        case "Intern":
+          let intern = new Intern(
+            answer.name,
+            answer.id,
+            answer.email,
+            answer.school
+          );
+          employees.push(intern);
+          console.log(intern);
+          break;
+
+        case "Manager":
+          let manager = new Manager(
+            answer.name,
+            answer.id,
+            answer.email,
+            answer.officeNumber
+          );
+          employees.push(manager);
+          console.log(manager);
+          break;
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 addEmployee();
+render(employees);
