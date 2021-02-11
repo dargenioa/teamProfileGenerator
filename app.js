@@ -10,7 +10,6 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
@@ -37,70 +36,51 @@ const render = require("./lib/htmlRenderer");
 const employees = [];
 
 const addEmployee = () => {
-    inquirer
-      .prompt([
-        {
-          name: "name",
-          type: "input",
-          message: "Please enter your first name."
-        },
-        {
-          name: "id",
-          type: "input",
-          message: "Please enter your employee ID."
-        },
-        {
-          name: "email",
-          type: "input",
-          message: "Please enter your employee email address."
-        },
-        {
-          name: "role",
-          type: "list",
-          message: "Please select your role at the company",
-          choices: [
-            "Engineer",
-            "Intern",
-            "Manager",
-          ]
-        },
-      ])
-      .then(function (answer) {
-        let choice = answer.role
-        switch (choice) {
-          case "Engineer":
-            inquirer
-            .prompt([
-              {
-                name: "github",
-                type: "input",
-                message: "Please enter your github username"
-              }
-            ]);
-            break;
-  
-          case "Intern":
-            inquirer
-            .prompt([
-              {
-                name: "school",
-                type: "input",
-                message: "Please enter the name of your highest school completed"
-              }
-            ]);
-            break;
-  
-          case "Manager":
-            inquirer
-            .prompt([
-              {
-                name: "officeNumber",
-                type: "input",
-                message: "Please enter your office number"
-              }
-            ]);
-        break;
-      }
-    });
-}
+  inquirer.prompt([
+    {
+      name: "name",
+      type: "input",
+      message: "Please enter your first name.",
+    },
+    {
+      name: "id",
+      type: "input",
+      message: "Please enter your employee ID.",
+    },
+    {
+      name: "email",
+      type: "input",
+      message: "Please enter your employee email address.",
+    },
+    {
+      name: "role",
+      type: "list",
+      message: "Please select your role at the company",
+      choices: ["Engineer", "Intern", "Manager"],
+    },
+    {
+      name: "github",
+      type: "input",
+      message: "Please enter your github username",
+      when: (answer) => answer.role === "Engineer",
+    },
+    {
+      name: "school",
+      type: "input",
+      message: "Please enter the name of your highest school completed",
+      when: (answer) => answer.role === "Intern",
+    },
+    {
+      name: "officeNumber",
+      type: "input",
+      message: "Please enter your office number",
+      when: (answer) => answer.role === "Manager",
 
+    },
+  ])
+  .then(results => {
+    console.log(results);
+  })
+};
+
+addEmployee();
