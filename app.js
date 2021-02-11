@@ -77,32 +77,15 @@ const addEmployee = () => {
         message: "Please enter your office number",
         when: (answer) => answer.role === "Manager",
       },
-      {
-        name: "newEmployee",
-        type: "confirm",
-        message: "Would you like to add another employee?",
-        validate: (answer) => {
-          if (answer.newEmployee === true) {
-            addEmployee();
-          } else {
-            console.log("exit");
-          }
-        },
-      },
     ])
     .then((answer) => {
       let choice = answer.role;
       switch (choice) {
         case "Engineer":
-          let engineer = new Engineer(
-            answer.name,
-            answer.id,
-            answer.email,
-            answer.github
-          );
+          let engineer = new Engineer(answer.name, answer.id, answer.email, answer.github);
           employees.push(engineer);
-          console.log(engineer + employees);
-          console.log(answer);
+          addAnother();
+
           break;
 
         case "Intern":
@@ -114,6 +97,8 @@ const addEmployee = () => {
           );
           employees.push(intern);
           console.log(intern);
+          addAnother();
+
           break;
 
         case "Manager":
@@ -125,12 +110,35 @@ const addEmployee = () => {
           );
           employees.push(manager);
           console.log(manager);
+          addAnother();
+
           break;
       }
     })
     .catch((err) => {
       console.log(err);
     });
+};
+
+const addAnother = () => {
+  inquirer.prompt([
+    {
+      name: "newEmployee",
+      type: "list",
+      message: "Would you like to add another employee?",
+      choices: [
+        "Yes",
+        "No"
+      ]
+    }
+    ])
+    .then(answer => {
+      if (answer.newEmployee === "Yes") {
+        addEmployee();
+      } else {
+        console.log("exit");
+      }
+    })
 };
 
 addEmployee();
