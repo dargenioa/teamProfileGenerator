@@ -82,8 +82,15 @@ const addEmployee = () => {
       let choice = answer.role;
       switch (choice) {
         case "Engineer":
-          let engineer = new Engineer(answer.name, answer.id, answer.email, answer.github);
+          let engineer = new Engineer(
+            answer.name,
+            answer.id,
+            answer.email,
+            answer.github
+          );
+          console.log(engineer);
           employees.push(engineer);
+          console.log(employees);
           addAnother();
 
           break;
@@ -121,25 +128,45 @@ const addEmployee = () => {
 };
 
 const addAnother = () => {
-  inquirer.prompt([
-    {
-      name: "newEmployee",
-      type: "list",
-      message: "Would you like to add another employee?",
-      choices: [
-        "Yes",
-        "No"
-      ]
-    }
+  inquirer
+    .prompt([
+      {
+        name: "newEmployee",
+        type: "list",
+        message: "Would you like to add another employee?",
+        choices: ["Yes", "No"],
+      },
     ])
-    .then(answer => {
+    .then((answer) => {
       if (answer.newEmployee === "Yes") {
         addEmployee();
       } else {
+        console.log(employees);
+        writeFile();
         console.log("exit");
       }
-    })
+    });
 };
 
 addEmployee();
-render(employees);
+// const html = render(employees);
+
+
+const writeFile = () => {
+
+  if (!fs.existsSync(OUTPUT_DIR)){
+    fs.mkdirSync(OUTPUT_DIR);
+  };
+  
+fs.writeFileSync(outputPath, render(employees));
+console.log("Successfully wrote to team.html");
+
+};
+
+
+
+//   } catch (err) {
+//       console.log(err);
+//   };
+
+// };
